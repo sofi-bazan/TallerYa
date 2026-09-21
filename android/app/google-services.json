@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1011612451648",
+    "project_id": "tallerya-bc9f0",
+    "storage_bucket": "tallerya-bc9f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011612451648:android:2e8c8ebaa6562e78e170a5",
+        "android_client_info": {
+          "package_name": "com.itu.tallerya.taller_yaa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADGzxVaWAAVNG6IgsN6tpSaF_pymiHbQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

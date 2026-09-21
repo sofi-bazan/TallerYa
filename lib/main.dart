@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // Agregamos el núcleo de Firebase
+import 'firebase_options.dart'; // Agregamos el archivo que generó la terminal
+
 import 'viewmodels/tienda_viewmodel.dart';
 import 'pantallas/controlador_pestanas_principal.dart';
 
-void main() {
+void main() async {
+  // Esta línea es OBLIGATORIA. Le dice a Flutter que espere a que Firebase se conecte
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializa Firebase usando las credenciales generadas para Android/iOS
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(AplicacionRepuestoYa());
 }
 

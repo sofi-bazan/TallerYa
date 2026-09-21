@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../viewmodels/tienda_viewmodel.dart';
 import '../widgets/barra_navegacion_inferior.dart';
-import 'pantalla_inicio.dart';
-import 'pantalla_carrito.dart';
+import 'p_inicio.dart';
+import 'p_carrito.dart';
 
 class ControladorPestanasPrincipal extends StatefulWidget {
   final TiendaViewModel viewModel;

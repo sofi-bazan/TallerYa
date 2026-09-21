@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // NUEVO
 import '../modelos/producto.dart';
 import '../modelos/articulo_carrito.dart';
 
 class TiendaViewModel extends ChangeNotifier {
-  final List<Producto> _productos = [
-    Producto(
-      id: '1', nombre: 'Alternador', modeloAuto: 'Volkswagen Gol Trend 2016',
-      nombreVendedor: 'Taller Los Hermanos', calificacion: 4.7, opiniones: 128,
-      precio: 85000, condicion: 'Usado', stock: 2,
-    ),
-    Producto(
-      id: '2', nombre: 'Óptica delantera izquierda', modeloAuto: 'Volkswagen Gol Trend 2016',
-      nombreVendedor: 'Repuestos San Martin', calificacion: 4.5, opiniones: 89,
-      precio: 62000, condicion: 'Reacondicionado', stock: 1,
-    ),
-    Producto(
-      id: '3', nombre: 'Espejo lateral derecho', modeloAuto: 'Volkswagen Gol Trend 2016',
-      nombreVendedor: 'Taller Pista 1', calificacion: 4.2, opiniones: 64,
-      precio: 28000, condicion: 'Usado', stock: 5,
-    ),
-  ];
+  // 1. Instancia de la base de datos Firestore
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // 2. La lista arranca vacía, ya no hay datos "falsos"
+  List<Producto> _productos = [];
   final List<ArticuloCarrito> _carrito = [];
   bool _cargando = false;
 
@@ -28,19 +16,47 @@ class TiendaViewModel extends ChangeNotifier {
   List<ArticuloCarrito> get carrito => _carrito;
   bool get cargando => _cargando;
 
-  int get totalArticulosCarrito => _carrito.fold(0, (suma, articulo) => suma + articulo.cantidad);
-  double get subtotal => _carrito.fold(0, (suma, articulo) => suma + (articulo.producto.precio * articulo.cantidad));
-  double get costoEnvio => 3500;
-  double get total => subtotal + costoEnvio;
-
-  Future<void> buscarProductos() async {
-    _cargando = true;
-    notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
-    _cargando = false;
-    notifyListeners();
+  // ... (Tus otros getters como totalArticulosCarrito, subtotal, etc. quedan EXACTAMENTE IGUAL)
+  int get totalArticulosCarrito {
+    int suma = 0;
+    for (var articulo in _carrito) {
+      suma = suma + articulo.cantidad;
+    }
+    return suma;
   }
 
+  double get subtotal {
+    double suma = 0.0;
+    for (var articulo in _carrito) {
+      suma = suma + (articulo.producto.precio * articulo.cantidad);
+    }
+    return suma;
+  }
+
+  double get costoEnvio => 3500.0;
+  double get total => subtotal + costoEnvio;
+
+  // 3. NUEVA LÓGICA: Traer de Firebase
+  Future<void> buscarProductos() async {
+    _cargando = true;
+    notifyListeners(); // Avisa a la UI que muestre la ruedita de carga
+
+    try {
+      // Va a Firebase, busca la colección 'repuestos' y trae todo
+      QuerySnapshot snapshot = await _db.collection('repuestos').get();
+
+      // Convierte los documentos de Firebase en una lista de Productos de Dart
+      _productos = snapshot.docs.map((doc) => Producto.desdeFirestore(doc)).toList();
+
+    } catch (error) {
+      print("Hubo un error al traer datos de Firebase: $error");
+    } finally {
+      _cargando = false;
+      notifyListeners(); // Avisa a la UI que ya terminó de cargar
+    }
+  }
+
+  // ... (Tus funciones de agregarAlCarrito, actualizarCantidad y eliminarDelCarrito quedan EXACTAMENTE IGUAL)
   void agregarAlCarrito(Producto producto) {
     final indice = _carrito.indexWhere((articulo) => articulo.producto.id == producto.id);
     if (indice >= 0) {

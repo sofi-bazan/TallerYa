@@ -1,0 +1,24 @@
+[
+  {
+    "id": "repuesto_1",
+    "nombre": "Electroventilador",
+    "modeloAuto": "Fiat Palio 2014",
+    "nombreVendedor": "Refrigeración Total",
+    "calificacion": 4.5,
+    "opiniones": 68,
+    "precio": 54000.0,
+    "condicion": "Reacondicionado",
+    "stock": 3
+  },
+  {
+    "id": "repuesto_2",
+    "nombre": "Múltiple de Escape",
+    "modeloAuto": "Chevrolet Corsa 2010",
+    "nombreVendedor": "Escape Centenario",
+    "calificacion": 4.2,
+    "opiniones": 34,
+    "precio": 45000.0,
+    "condicion": "Usado",
+    "stock": 2
+  },
+]
